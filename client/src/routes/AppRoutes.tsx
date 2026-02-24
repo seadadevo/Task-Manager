@@ -9,13 +9,14 @@ import NotFound from "../pages/NotFound";
 const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+           
             <Route element={<MainLayout />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/tasks/:id" element={<TaskDetails />} />
+                <Route path="*" element={<NotFound />} />
             </Route>
-            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 };

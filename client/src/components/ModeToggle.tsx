@@ -10,7 +10,7 @@ import { useTheme } from "@/components/ThemeProvider";
 
 const ModeToggle = () => {
     const { theme, setTheme } = useTheme();
-    const renderDropMenyContent = (theTheme : string , text : string , icon : React.ReactNode) => {
+    const renderDropMenuContent = (theTheme : string , text : string , icon : React.ReactNode) => {
         return (
                 <DropdownMenuItem
                     onClick={() => setTheme(theTheme as any )}
@@ -31,9 +31,9 @@ const ModeToggle = () => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end">
-                {renderDropMenyContent("light", "Light", <Sun className="mr-2 h-4 w-4" />)}
-                {renderDropMenyContent("dark", "Dark", <Moon className="mr-2 h-4 w-4" />)}
-                {renderDropMenyContent("system", "System", <Monitor className="mr-2 h-4 w-4" />)}
+                {renderDropMenuContent("light", "Light", <Sun className="mr-2 h-4 w-4" />)}
+                {renderDropMenuContent("dark", "Dark", <Moon className="mr-2 h-4 w-4" />)}
+                {renderDropMenuContent("system", "System", <Monitor className="mr-2 h-4 w-4" />)}
             </DropdownMenuContent>
         </DropdownMenu>
     );
