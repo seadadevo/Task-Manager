@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 
-interface IUser extends mongoose.Document {
+export interface IUser extends mongoose.Document {
     password: string;
     passwordConfirm?: string; 
     isModified: (field: string) => boolean;

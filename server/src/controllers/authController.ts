@@ -6,6 +6,13 @@ import { ENV } from "../config/env";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 
+const cookieOps = {
+    httpOnly: true,
+    secure: ENV.NODE_ENV === 'production',
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+}
+
+
 export const register = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {name, email, password, passwordConfirm , photo} = req.body;
     
@@ -33,11 +40,7 @@ export const register = catchAsync(async (req: Request, res: Response, next: Nex
         {expiresIn: '7d'} ,
     ) 
 
-    res.cookie('jwt', refreshToken, {
-        httpOnly: true,
-        secure: ENV.NODE_ENV === 'production',
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    })
+    res.cookie('jwt', refreshToken, cookieOps);
 
     res.status(201).json({
         success: true,
@@ -80,11 +83,7 @@ export const login = catchAsync(async (req: Request, res: Response , next: NextF
         {expiresIn: '7d'}
     )
 
-     res.cookie('jwt', refreshToken, {
-        httpOnly: true,
-        secure: ENV.NODE_ENV === 'production',
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    })
+     res.cookie('jwt', refreshToken, cookieOps);
 
     res.status(200).json({
         success: true,
@@ -147,5 +146,15 @@ export const logout = catchAsync(async (req: Request, res: Response , next: Next
     res.status(200).json({
         success: true,
         message: 'User logged out successfully'
+    })
+})
+
+
+export const getMe = catchAsync(async (req: Request, res: Response , next: NextFunction) => {
+    res.status(200).json({
+        success: true,
+        data: {
+            user: req.user
+        }
     })
 })

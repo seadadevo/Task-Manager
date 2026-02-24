@@ -5,6 +5,8 @@ import { ENV } from "./config/env";
 import cookieParser from "cookie-parser";
 import { globalHandleError } from "./middlewares/errorMiddleware";
 import authRoutes from "./routes/authRoutes";
+import "./types"; 
+
 
 const app: Application = express();
 
