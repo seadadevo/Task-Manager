@@ -1,6 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-const taskSchema = new mongoose.Schema({
+export interface ITask extends Document {
+    title: string;
+    description: string;
+    status: 'Pending' | 'In-Progress' | 'Completed';
+    priority: 'Low' | 'Medium' | 'High';
+    dueDate: Date;
+    user: mongoose.Types.ObjectId;
+}
+
+const taskSchema = new mongoose.Schema<ITask>({
     title: {
         type: String,
         required: [true, 'A Task Must have a title'],
@@ -51,5 +60,5 @@ const taskSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model<ITask>('Task', taskSchema);
 export default Task

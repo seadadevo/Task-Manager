@@ -5,6 +5,7 @@ import { ENV } from "./config/env";
 import cookieParser from "cookie-parser";
 import { globalHandleError } from "./middlewares/errorMiddleware";
 import authRoutes from "./routes/authRoutes";
+import taskRoutes from "./routes/taskRoutes";
 import "./types"; 
 
 
@@ -26,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api/v1/auth' , authRoutes)
-
+app.use('/api/v1/tasks' , taskRoutes)
 
 app.use(globalHandleError)
 

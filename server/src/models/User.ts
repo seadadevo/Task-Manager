@@ -3,10 +3,15 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 
 export interface IUser extends mongoose.Document {
+    id: string;
+    name: string;
+    email: string;
+    photo: string;
     password: string;
     passwordConfirm?: string; 
     isModified: (field: string) => boolean;
 }
+
 
 const userSchema  = new mongoose.Schema({
     name: {
