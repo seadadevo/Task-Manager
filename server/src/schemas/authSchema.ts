@@ -1,11 +1,17 @@
 import { z } from "zod";
 
+const nameField = z.string().min(5, "Name must be at least 5 characters");
+const emailField = z.email("Invalid email format");
+const passwordField = z.string().min(6, "Password must be at least 6 characters");
+const passwordConfirmField = z.string().min(6, "Password must be at least 6 characters");
+
+
 export const signupSchema = z.object({
   body: z.object({
-    name: z.string().min(5, "Name must be at least 5 characters"),
-    email: z.string().email("Invalid email format"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    passwordConfirm: z.string().min(6, "Password must be at least 6 characters")
+    name: nameField,
+    email: emailField,
+    password: passwordField,
+    passwordConfirm: passwordConfirmField
   }).refine((data) => data.password === data.passwordConfirm, {
     message: "Passwords don't match",
     path: ["passwordConfirm"], 
@@ -14,7 +20,7 @@ export const signupSchema = z.object({
 
 export const loginSchema = z.object({
   body: z.object({
-    email: z.string().email("Invalid email format"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    email: emailField,
+    password: passwordField,
   }),
 });
