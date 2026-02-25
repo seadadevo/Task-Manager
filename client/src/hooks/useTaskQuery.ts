@@ -1,16 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import myApi from "@/api/apiClient";
-
-export interface ITask {
-    _id: string;
-    title: string;
-    description?: string;
-    status: "Pending" | "In-Progress" | "Completed";
-    priority: "Low" | "Medium" | "High";
-    dueDate?: string;
-    createdAt: string;
-    updatedAt: string;
-}
+import type { ITask } from "@/interfaces/task";
 
 const useTaskQuery = (id: string) => {
     return useQuery<ITask>({

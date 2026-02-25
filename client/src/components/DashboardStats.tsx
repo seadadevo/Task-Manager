@@ -1,12 +1,8 @@
 import { CheckCircle2, Clock, Loader2, ListTodo } from "lucide-react";
 import StatCard from "@/components/StatCard";
+import type { ITaskStats } from "@/interfaces/task";
 
-export interface ITaskStats {
-  total: number;
-  pending: number;
-  inProgress: number;
-  completed: number;
-}
+export type { ITaskStats };
 
 interface IDashboardStatsProps {
   stats: ITaskStats;

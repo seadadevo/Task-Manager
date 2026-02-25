@@ -1,14 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import myApi from "@/api/apiClient";
+import type { IUpdateTaskData } from "@/interfaces/task";
 
-export interface IUpdateTaskData {
-    title?: string;
-    description?: string;
-    status?: "Pending" | "In-Progress" | "Completed";
-    priority?: "Low" | "Medium" | "High";
-    dueDate?: string;
-}
+export type { IUpdateTaskData };
 
 const useUpdateTask = () => {
     const queryClient = useQueryClient();
