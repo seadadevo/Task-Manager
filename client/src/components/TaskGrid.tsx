@@ -1,13 +1,17 @@
 import { Loader2 } from "lucide-react";
 import TaskCard from "@/components/TaskCard";
+import PaginationControls from "./PaginationControls";
 
 interface ITaskGridProps {
     tasks: any[];
     isLoading: boolean;
     isError: boolean;
+    page: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
 }
 
-const TaskGrid = ({ tasks, isLoading, isError }: ITaskGridProps) => {
+const TaskGrid = ({ tasks, isLoading, isError, page, totalPages, onPageChange }: ITaskGridProps) => {
     if (isLoading) {
         return (
             <div className="flex justify-center py-20">
@@ -33,10 +37,17 @@ const TaskGrid = ({ tasks, isLoading, isError }: ITaskGridProps) => {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tasks.map((task) => (
-                <TaskCard key={task._id} task={task} />
-            ))}
+        <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {tasks.map((task) => (
+                    <TaskCard key={task._id} task={task} />
+                ))}
+            </div>
+            <PaginationControls
+                page={page}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+            />
         </div>
     );
 };

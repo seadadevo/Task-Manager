@@ -1,10 +1,8 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, Flag } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import useDeleteTask from "@/hooks/useDeleteTask";
+import { Calendar, Flag, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
-
+import useDeleteTask from "@/hooks/useDeleteTask";
 
 const STATUS_STYLES: Record<string, string> = {
     "Pending":     "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
@@ -31,6 +29,7 @@ interface ITaskCardProps {
 
 const TaskCard = ({ task }: ITaskCardProps) => {
     const { mutate: deleteTask, isPending } = useDeleteTask();
+    const [showConfirm, setShowConfirm] = useState(false);
 
     const formattedDate = task.dueDate
         ? new Date(task.dueDate).toLocaleDateString("en-US", {
@@ -53,16 +52,17 @@ const TaskCard = ({ task }: ITaskCardProps) => {
                 <Button
                     size="icon"
                     variant="ghost"
-                    disabled={isPending}
-                    onClick={() => deleteTask(task._id)}
+                    onClick={() => setShowConfirm(true)}
                     className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg"
                 >
                     <Trash2 size={14} />
                 </Button>
             </div>
+
             {task.description && (
                 <p className="text-sm text-muted-foreground line-clamp-2">{task.description}</p>
             )}
+
             <div className="flex gap-2 flex-wrap">
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_STYLES[task.status]}`}>
                     {task.status}
@@ -72,11 +72,42 @@ const TaskCard = ({ task }: ITaskCardProps) => {
                     {task.priority}
                 </span>
             </div>
-            
+
             {formattedDate && (
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-auto">
                     <Calendar size={12} />
                     <span>{formattedDate}</span>
+                </div>
+            )}
+
+            {showConfirm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="bg-card border rounded-2xl p-6 shadow-xl w-full max-w-sm mx-4">
+                        <h3 className="font-semibold text-foreground text-lg">Delete task?</h3>
+                        <p className="text-sm text-muted-foreground mt-1 mb-5">
+                            This will permanently delete <span className="font-medium text-foreground">"{task.title}"</span>.
+                        </p>
+                        <div className="flex gap-2 justify-end">
+                            <Button
+                                variant="outline"
+                                className="rounded-xl"
+                                onClick={() => setShowConfirm(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                className="rounded-xl"
+                                disabled={isPending}
+                                onClick={() => {
+                                    deleteTask(task._id);
+                                    setShowConfirm(false);
+                                }}
+                            >
+                                {isPending ? "Deleting..." : "Delete"}
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
