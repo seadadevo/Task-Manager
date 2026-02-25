@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import myApi from "@/api/apiClient";
+import { useAuthStore } from "@/store/authStore";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInputField from "@/components/FormInputField";
@@ -13,6 +14,7 @@ import { registerSchema, type RegisterFormValues } from "@/schemas/authSchema";
 
 const Register = () => {
     const navigate = useNavigate();
+    const { setAuth } = useAuthStore();
 
     const form = useForm<RegisterFormValues>({
         resolver: zodResolver(registerSchema),
@@ -20,11 +22,10 @@ const Register = () => {
     });
 
     const { mutate: registerUser, isPending } = useMutation({
-        mutationFn: async (data: RegisterFormValues) => {
-            const res = await myApi.post("/auth/signup", data);
-            return res.data;
-        },  
-        onSuccess: () => {
+        mutationFn: (data: RegisterFormValues) =>
+            myApi.post("/auth/signup", data),
+        onSuccess: (res: any) => {
+            setAuth(res.data, res.accessToken);
             toast.success("Account created");
             navigate("/");
         },

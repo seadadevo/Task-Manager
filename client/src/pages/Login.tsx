@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import myApi from "@/api/apiClient";
+import { useAuthStore } from "@/store/authStore";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import FormInputField from "@/components/FormInputField";
@@ -13,6 +14,7 @@ import { loginSchema, type LoginFormValues } from "@/schemas/authSchema";
 
 const Login = () => {
     const navigate = useNavigate();
+    const { setAuth } = useAuthStore();
 
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -20,11 +22,10 @@ const Login = () => {
     });
 
     const { mutate: loginUser, isPending } = useMutation({
-        mutationFn: async (data: LoginFormValues) => {
-            const res = await myApi.post("/auth/login", data);
-            return res.data;
-        },
-        onSuccess: () => {
+        mutationFn: (data: LoginFormValues) =>
+            myApi.post("/auth/login", data),
+        onSuccess: (res: any) => {
+            setAuth(res.data, res.accessToken);
             toast.success("Welcome back!");
             navigate("/");
         },
