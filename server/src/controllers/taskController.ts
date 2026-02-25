@@ -112,3 +112,35 @@ export const deleteAll = catchAsync(async (req: Request, res: Response, next: Ne
         data: null
     })
 })
+
+export const getTaskStats = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?._id;
+
+    const statsList = await Task.aggregate([
+        { $match: { user: userId } },
+       
+        {
+            $group: {
+                _id: null, 
+                total: { $sum: 1 },
+                pending: {
+                    $sum: { $cond: [{ $eq: ["$status", "Pending"] }, 1, 0] }
+                },
+                inProgress: {
+                    $sum: { $cond: [{ $eq: ["$status", "In-Progress"] }, 1, 0] }
+                },
+                completed: {
+                    $sum: { $cond: [{ $eq: ["$status", "Completed"] }, 1, 0] }
+                }
+            }
+        },
+    ]);
+
+    const stats = statsList[0] || { total: 0, pending: 0, inProgress: 0, completed: 0 };
+
+    res.status(200).json({
+        success: true,
+        data: { stats },
+    });
+});
+
