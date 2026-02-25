@@ -1,10 +1,11 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Plus, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ModeToggle from "@/components/ModeToggle";
 import { useAuthStore } from "@/store/authStore";
 import myApi from "@/api/apiClient";
 import { toast } from "sonner";
+import CreateTaskDialog from "@/components/CreateTaskDialog";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -35,12 +36,7 @@ const Navbar = () => {
                     <nav className="flex items-center gap-3">
                         {isAuthenticated && (
                             <>
-                                <Link to="">
-                                    <Button className="flex items-center gap-2 rounded-xl bg-gray-900 text-white shadow-md hover:bg-gray-800 hover:shadow-lg transition-all active:scale-95 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                                        <Plus size={18} />
-                                        <span className="hidden sm:inline">New Task</span>
-                                    </Button>
-                                </Link>
+                                <CreateTaskDialog />
 
                                 <Button
                                     onClick={handleLogout}
